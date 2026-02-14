@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Valentine's Story</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --primary-pink: #ff4d6d;
+            --secondary-pink: #ff85a1;
+            --soft-white: #fff5f6;
+        }
+
+        body {
+            background-color: var(--soft-white);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .romantic-font {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Flower Animation Styles */
+        .flower-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .flower {
+            position: absolute;
+            top: -50px;
+            font-size: 24px;
+            animation: fall linear forwards;
+            opacity: 0.7;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(255, 77, 109, 0.2);
+            transition: transform 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Slider Styles */
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            aspect-ratio: 16/9;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Popup Styles */
+        #surpriseModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #surpriseModal.active {
+            display: flex;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Animated Title Effect */
+        .animated-love-title {
+            background: linear-gradient(90deg, #ff4d6d, #ff85a1, #ff4d6d);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite, pop-in 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            display: inline-block;
+        }
+
+        @keyframes shimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        @keyframes pop-in {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .pulse-soft {
+            animation: pulse-soft 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-soft {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Custom Audio Player Styling */
+        audio::-webkit-media-controls-panel {
+            background-color: #fff5f6;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--soft-white);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-pink);
+            border-radius: 10px;
+        }
+
+        /* Floating Heart Button */
+        .heart-btn {
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Falling Flowers Background -->
+    <div class="flower-container" id="flowerContainer"></div>
+    <!-- Surprise Popup Modal -->
+    <div id="surpriseModal" onclick="closeSurprise()">
+        <div class="glass-card max-w-lg w-full p-8 text-center relative shadow-2xl" onclick="event.stopPropagation()">
+            <button onclick="closeSurprise()"
+                class="absolute top-4 right-4 text-pink-400 hover:text-pink-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+
+            <div class="rounded-2xl overflow-hidden mb-6 shadow-lg h-80 pulse-soft">
+                <img src="nita.jpg" alt="I Love You" class="w-full h-full object-cover">
+            </div>
+
+            <h2 class="text-6xl romantic-font mb-4 animated-love-title">I Love You</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-6 italic text-lg px-4">
+                "In all the world, there is no heart for me like yours. In all the world, there is no love for you like
+                mine. You are my today and all of my tomorrows."
+            </p>
+            <div class="text-pink-500 text-3xl animate-bounce">❤️❤️❤️</div>
+        </div>
+    </div>
+
+    <main class="relative z-10 container mx-auto px-4 py-12F max-w-6xl">
+
+        <!-- Header -->
+        <header class="text-center mb-16">
+            <h1 class="text-6xl md:text-8xl romantic-font text-pink-600 mb-4">Happy Valentine's Day</h1>
+            <p class="text-pink-400 italic text-lg">Every moment with you is a gift...</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Card 1: Main Photo -->
+            <div class="glass-card p-6">
+                <h2 class="text-2xl font-semibold text-pink-700 mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z">
+                        </path>
+                    </svg>
+                    A Special Moment
+                </h2>
+                <div
+                    class="rounded-xl overflow-hidden shadow-inner bg-pink-100 mb-4 h-48 flex items-center justify-center relative group">
+                    <img src="smile.jpg" alt="Valentine" id="mainImage" class="w-full h-full object-cover">
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <label class="cursor-pointer bg-white px-4 py-2 rounded-full text-pink-600 font-medium">
+                            Replace Image
+                            <input type="file" class="hidden" accept="image/*"
+                                onchange="previewImage(event, 'mainImage')">
+                        </label>
+                    </div>
+                </div>
+                <p class="text-gray-600 text-sm italic">"The best thing to hold onto in life is each other."</p>
+            </div>
+
+            <!-- Card 2: Video Memory -->
+            <div class="glass-card p-6">
+                <h2 class="text-2xl font-semibold text-pink-700 mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M15 8l5-2.5a1 1 0 011.447.895v11.21a1 1 0 01-1.447.895L15 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h8a2 2 0 012 2v0z">
+                        </path>
+                    </svg>
+                    Our Story in Motion
+                </h2>
+                <div
+                    class="rounded-xl overflow-hidden shadow-inner bg-black mb-4 h-48 flex items-center justify-center relative group">
+                    <video id="memoryVideo" class="w-full h-full object-contain" controls autoplay muted loop playsinline>
+                        <source src="hahha_1.mp4" type="video/mp4">
+                    </video>
+                    <div id="videoPlaceholder"
+                        class="absolute inset-0 flex flex-col items-center justify-center text-white bg-pink-200/50 pointer-events-none">
+                        <svg class="w-10 h-10 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-gray-600 text-sm">Recordings of our laughter and joy.</p>
+            </div>
+
+            <!-- Card 3: Message with Image & Audio -->
+            <div class="glass-card p-6">
+                <h2 class="text-2xl font-semibold text-pink-700 mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                        </path>
+                    </svg>
+                    A Message for You
+                </h2>
+                <div class="flex-grow">
+                    <div class="rounded-lg overflow-hidden h-32 mb-4 relative group">
+                        <img src="flower.jpg"
+                            id="messageImage" class="w-full h-full object-cover">
+                        <div
+                            class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <label
+                                class="cursor-pointer bg-white/90 px-3 py-1 rounded-full text-pink-600 text-xs font-bold">
+                                Edit
+                                <input type="file" class="hidden" accept="image/*"
+                                    onchange="previewImage(event, 'messageImage')">
+                            </label>
+                        </div>
+                    </div>
+                    <input type="text" value="To My Dearest,"
+                        class="w-full bg-transparent border-b border-pink-200 romantic-font text-2xl text-pink-600 focus:outline-none focus:border-pink-500 mb-2">
+                    <textarea class="w-full bg-transparent text-gray-700 text-sm h-20 resize-none focus:outline-none"
+                        placeholder="Write your heart out here...">Your love is the melody that plays in my heart every single day. I'm so grateful to have you by my side.</textarea>
+                </div>
+                <div class="mt-4 pt-4 border-t border-pink-100">
+                    <div class="flex items-center space-x-2">
+                        <audio id="messageAudio" src="oun.mp3" class="w-full h-8" controls autoplay></audio>
+                        <label
+                            class="cursor-pointer p-2 bg-pink-100 rounded-full text-pink-600 hover:bg-pink-200 transition">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.983 5.983 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.984 3.984 0 00-1.172-2.828 1 1 0 010-1.415z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <input type="file" class="hidden" accept="audio/mp3,audio/wav"
+                                onchange="handleAudioUpload(event, 'messageAudio')">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Dynamic Image Slider -->
+            <div class="glass-card p-6 md:col-span-2">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold text-pink-700 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z">
+                            </path>
+                        </svg>
+                        Gallery of Love
+                    </h2>
+                    <label
+                        class="cursor-pointer bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-lg text-sm transition">
+                        Add Photos
+                        <input type="file" class="hidden" accept="image/*" multiple
+                            onchange="handleSliderUpload(event)">
+                    </label>
+                </div>
+
+                <div class="slider-container shadow-lg">
+                    <div class="slider-track" id="sliderTrack">
+                        <img src="love.jpg" class="slide">
+                        <img src="make.jpg" class="slide">
+                        <img src="hahha.jpg" class="slide">
+                    </div>
+
+                    <button onclick="moveSlider(-1)"
+                        class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white p-2 rounded-full transition">
+                        <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <button onclick="moveSlider(1)"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white p-2 rounded-full transition">
+                        <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+             <div class="glass-card p-6 flex items-center justify-center text-center">
+                <div class="space-y-4">
+                    <div class="text-5xl">💝</div>
+                    <h3 class="text-xl font-bold text-pink-700">Forever Promise</h3>
+                    <p class="text-sm text-gray-500">I promise to laugh with you, cry with you, and grow old with you. You're my person.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Call to Action -->
+        <footer class="mt-16 text-center">
+            <button onclick="triggerSurprise()"
+                class="heart-btn bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-xl font-bold shadow-xl transition transform hover:scale-110 flex items-center mx-auto">
+                Press for a Surprise ❤️
+            </button>
+            <p class="mt-8 text-pink-400 font-light">&copy; Forever & Always</p>
+        </footer>
+    </main>
+
+    <!-- Script Section -->
+    <script>
+        // 1. Flower Animation
+        const flowerContainer = document.getElementById('flowerContainer');
+        const flowerEmojis = ['🌸', '🌹', '🌺', '🌷', '💐', '❤️', '✨'];
+
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            flower.innerText = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            flower.style.fontSize = (Math.random() * 20 + 15) + 'px';
+
+            flowerContainer.appendChild(flower);
+
+            setTimeout(() => {
+                flower.remove();
+            }, 7000);
+        }
+
+        setInterval(createFlower, 300);
+
+        // 2. Image Preview Logic
+        function previewImage(event, targetId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(targetId).src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 3. Video Upload Logic
+        function handleVideoUpload(event) {
+            const file = event.target.files[0];
+            const video = document.getElementById('memoryVideo');
+            const placeholder = document.getElementById('videoPlaceholder');
+
+            if (file) {
+                const url = URL.createObjectURL(file);
+                video.src = url;
+                video.load();
+                placeholder.classList.add('hidden');
+                video.play().catch(() => { });
+            }
+        }
+
+        // Try autoplay on load and keep placeholder state in sync.
+        const memoryVideo = document.getElementById('memoryVideo');
+        const videoPlaceholder = document.getElementById('videoPlaceholder');
+        if (memoryVideo && videoPlaceholder) {
+            const hidePlaceholder = () => videoPlaceholder.classList.add('hidden');
+            const showPlaceholder = () => videoPlaceholder.classList.remove('hidden');
+
+            memoryVideo.addEventListener('playing', hidePlaceholder);
+            memoryVideo.addEventListener('canplay', hidePlaceholder);
+            memoryVideo.addEventListener('error', showPlaceholder);
+
+            memoryVideo.play().then(hidePlaceholder).catch(showPlaceholder);
+        }
+
+        // 4. Audio Upload Logic
+        function handleAudioUpload(event, audioId, titleId = null) {
+            const file = event.target.files[0];
+            const audio = document.getElementById(audioId);
+            if (file) {
+                const url = URL.createObjectURL(file);
+                audio.src = url;
+                audio.load();
+                audio.play().catch(() => { });
+                if (titleId) {
+                    document.getElementById(titleId).innerText = file.name;
+                }
+            }
+        }
+
+        // Attempt autoplay for message audio; if blocked, retry after first user interaction.
+        const messageAudio = document.getElementById('messageAudio');
+        if (messageAudio) {
+            const playMessageAudio = () => messageAudio.play().catch(() => { });
+            const unlockAndPlay = () => {
+                playMessageAudio();
+                document.removeEventListener('click', unlockAndPlay);
+                document.removeEventListener('touchstart', unlockAndPlay);
+                document.removeEventListener('keydown', unlockAndPlay);
+            };
+
+            playMessageAudio();
+            document.addEventListener('click', unlockAndPlay);
+            document.addEventListener('touchstart', unlockAndPlay);
+            document.addEventListener('keydown', unlockAndPlay);
+        }
+
+        // 5. Slider Logic
+        let currentSlide = 0;
+        const track = document.getElementById('sliderTrack');
+
+        function moveSlider(direction) {
+            const totalSlides = track.children.length;
+            if (totalSlides === 0) return;
+            currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        function handleSliderUpload(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'slide';
+                        track.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+                currentSlide = 0;
+                track.style.transform = `translateX(0)`;
+            }
+        }
+
+        // 6. Surprise Popup Logic
+        function triggerSurprise() {
+            // Burst of flowers
+            for (let i = 0; i < 40; i++) {
+                setTimeout(createFlower, i * 50);
+            }
+            // Open Modal
+            document.getElementById('surpriseModal').classList.add('active');
+        }
+
+        function closeSurprise() {
+            document.getElementById('surpriseModal').classList.remove('active');
+        }
+
+        // Auto-slide every 5 seconds
+        setInterval(() => moveSlider(1), 5000);
+    </script>
+</body>
+</html>
